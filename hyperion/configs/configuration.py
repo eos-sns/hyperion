@@ -3,6 +3,8 @@
 
 """ Configuration module """
 
+import json
+
 from logs.logger import get_custom_logger
 
 
@@ -18,6 +20,26 @@ class Configuration:
 
     def get_config(self, key):
         if not self.data:  # cache
-            self._parse()
+            with open(self.config_file) as reader:
+                self.data = json.load(reader)
 
         return self.data[key]
+
+    def get_matrioska_config(self, matrioska):
+        """
+        :param matrioska: list of inner configs, e.g ['db', 'coll', 'name']
+        :return: None or value in config
+        """
+
+        current_matrioska = self.get_config(matrioska[0])
+
+        for key in matrioska[1:]:  # first key already got
+            try:
+                current_matrioska = current_matrioska[key]
+            except:
+                return None
+
+        return current_matrioska
+
+    def get_db_name(self):
+        return self.get_matrioska_config(['db', 'name'])

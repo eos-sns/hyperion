@@ -14,10 +14,10 @@ class MetaRunner:
         self.logger = get_custom_logger(self.run_mode.upper())
 
     def log_message(self, *message):
-        self.logger.log_message(message)
+        self.logger.log_message(*message)
 
     def log_error(self, *error, cause):
-        self.logger.log_error(error, cause)
+        self.logger.log_error(*error, cause)
 
     def setup(self, configuration):
         self.configuration = configuration
