@@ -43,3 +43,18 @@ class Configuration:
 
     def get_db_name(self):
         return self.get_matrioska_config(['db', 'name'])
+
+    def get_source_folder_of(self, key):
+        return self.get_matrioska_config([key, 'files folder'])
+
+    def get_file_format_of(self, key):
+        return self.get_matrioska_config([key, 'file format'])
+
+    def get_simulation_id_regex(self):
+        return self.get_matrioska_config(['simulation', 'id regex'])
+
+    def get_walker_collection_name(self):
+        return self.get_matrioska_config(['Walker', 'collection name'])
+
+    def get_tau_collection_name(self):
+        return self.get_matrioska_config(['TauData', 'collection name'])
