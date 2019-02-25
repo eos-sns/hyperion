@@ -10,6 +10,7 @@ from logs.logger import get_custom_logger
 class MetaRunner:
     def __init__(self, run_mode):
         self.run_mode = run_mode
+        self.configuration = None  # will be setup in setup(...)
         self.logger = get_custom_logger(self.run_mode.upper())
 
     def log_message(self, *message):
@@ -17,6 +18,9 @@ class MetaRunner:
 
     def log_error(self, *error, cause):
         self.logger.log_error(error, cause)
+
+    def setup(self, configuration):
+        self.configuration = configuration
 
     @abc.abstractmethod
     def run(self):

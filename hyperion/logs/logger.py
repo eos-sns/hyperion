@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-
 """ Logging module """
 
 import logging
@@ -23,45 +22,37 @@ STREAM_HANDLER.setFormatter(logging.Formatter(LOG_FORMAT))
 LOGGER.addHandler(STREAM_HANDLER)
 
 
-def get_logger():
-    """Gets default logger
+class Logger:
+    def __init__(self, logger_name):
+        formatter = logging.Formatter(fmt=CUSTOM_LOG_FORMAT)
 
-    :return: logger
-    """
-    return LOGGER
+        handler = logging.StreamHandler()
+        handler.setFormatter(formatter)
 
+        self.logger = logging.getLogger(logger_name)
+        self.logger.setLevel(logging.DEBUG)
+        self.logger.addHandler(handler)
 
-def log_message(*message):
-    """Logs message
+    def log_message(self, *message):
+        """Logs message
 
-    :param message: message to log
-    """
-    logger = get_logger()
-    logger.debug(' '.join(message))
+        :param message: message to log
+        """
+        self.logger.debug(' '.join(message))
 
+    def log_error(self, *error, cause=None):
+        """Logs error
 
-def log_error(*error, cause=None):
-    """Logs error
+        :param error: error to log
+        :param cause: (optional) cause of error
+        """
+        thread_id = threading.current_thread().ident
+        text = ' '.join(error)
+        if cause:
+            text += ' due to ' + str(cause)
 
-    :param error: error to log
-    :param cause: (optional) cause of error
-    """
-    thread_id = threading.current_thread().ident
-    text = ' '.join(error)
-    if cause:
-        text += ' due to ' + str(cause)
-
-    logger = get_logger()
-    logger.error(LOG_THREAD_FORMAT.format(thread_id, text))
+        self.logger.error(LOG_THREAD_FORMAT.format(thread_id, text))
 
 
 def get_custom_logger(logger_name):
-    formatter = logging.Formatter(fmt=CUSTOM_LOG_FORMAT)
-
-    handler = logging.StreamHandler()
-    handler.setFormatter(formatter)
-
-    logger = logging.getLogger(logger_name)
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(handler)
-    return logger
+    return Logger(logger_name)
