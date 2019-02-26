@@ -5,6 +5,7 @@
 from pymongo import MongoClient
 
 from models.meta import MetaRunner
+from utils.files import find_files
 
 
 class Creator(MetaRunner):
@@ -21,3 +22,8 @@ class Creator(MetaRunner):
     def _create(self):
         db_name = self.configuration.get_db_name()
         self.mongo_db = self.mongo_client[db_name]
+
+    def _get_files_of(self, category):
+        file_regex = self.configuration.get_file_regex_of(category)
+        source_folder = self.configuration.get_folder_of(category)
+        return find_files(source_folder, file_regex, False)  # todo recurse ?
