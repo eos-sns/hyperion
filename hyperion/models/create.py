@@ -11,7 +11,19 @@ from utils.files import find_files
 class Creator(MetaRunner):
     def run(self):
         self.log_message('run')
-        raise NotImplementedError
+        self._create()
+
+        for category in self.configuration.categories():
+            self._create_category(category)
+
+    def _create_category(self, category):
+        files = self._get_files_of(category)
+        coll_name = self.configuration.get_collection_name_of(category)
+
+        for file in files:
+            simulation_data = self.configuration.get_simulation_data(file)
+            simulation_data['path'] = file
+            self.mongo_db[coll_name].insert_one(simulation_data)
 
     def __init__(self):
         super().__init__('CREATOR')

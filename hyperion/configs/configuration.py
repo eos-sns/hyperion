@@ -16,14 +16,14 @@ class Configuration:
         self.data = None  # will be a dictionary when parsed
         self.logger = get_custom_logger('CONFIGURATION')
 
-    def valid_categories(self):
+    def categories(self):
         return self.get_matrioska_config(['meta', 'categories'])
 
     def _parse(self):
         self.logger.log_message('parse', self.config_file)
         raise NotImplementedError
 
-    def get_config(self, key):
+    def _get_config(self, key):
         if not self.data:  # cache
             with open(self.config_file) as reader:
                 self.data = json.load(reader)
@@ -36,7 +36,7 @@ class Configuration:
         :return: None or value in config
         """
 
-        current_matrioska = self.get_config(matrioska[0])
+        current_matrioska = self._get_config(matrioska[0])
 
         for key in matrioska[1:]:  # first key already got
             try:
@@ -61,7 +61,7 @@ class Configuration:
     def get_file_id_regex(self):
         return self.get_matrioska_config(['simulation', 'file id regex group'])
 
-    def get_walker_collection_name_of(self, key):
+    def get_collection_name_of(self, key):
         return self.get_matrioska_config([key, 'collection name'])
 
     def get_file_regex(self, file_name):
@@ -78,7 +78,7 @@ class Configuration:
 
         return None
 
-    def get_simulation_id(self, file_path):
+    def get_simulation_data(self, file_path):
         file_name = ntpath.basename(file_path)
 
         file_regex = self.get_file_regex(file_name)
