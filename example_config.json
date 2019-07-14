@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "categories": [
+      "Walker",
+      "AveData",
+      "TauData",
+      "LightConeBoxes",
+      "LightConsSlices"
+    ]
+  },
+  "db": {
+    "name": "eos-data"
+  },
+  "simulation": {
+    "id regex group": "ID",
+    "file id regex group": "FILE_ID"
+  },
+  "Walker": {
+    "collection name": "walker",
+    "file regex": "Walker_0.000000_(?P<ID>.*).000000.txt",
+    "folder": "/eos_data/"
+  },
+  "AveData": {
+    "collection name": "ave",
+    "file regex": "AveData_0.000000_(?P<ID>.*).000000.txt",
+    "folder": "/eos_data/"
+  },
+  "TauData": {
+    "collection name": "tau",
+    "file regex": "Tau_e_0.000000_(?P<ID>.*).000000.txt",
+    "folder": "/eos_data/"
+  },
+  "LightConeBoxes": {
+    "collection name": "boxes",
+    "file regex": "delta_T_0.0000000_(?P<ID>.*).000000__zstart(?P<FILE_ID>.*)_zend***.******_FLIPBOXES0_200_300Mpc_lighttravel",
+    "folder": "/eos_data/"
+  },
+  "LightConsSlices": {
+    "collection name": "slices",
+    "file regex": "delta_T_0.0000000_(?P<ID>.*).000000_200_300Mpc_LightConeSlice",
+    "folder": "/eos_data/"
+  }
+}

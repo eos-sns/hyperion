@@ -20,7 +20,7 @@ AVAILABLE_MODES = {
 HERE = os.path.abspath(os.path.dirname(__file__))
 UP_HERE = os.path.dirname(HERE)
 DEFAULT_CONFIG_FOLDER = os.path.join(UP_HERE, 'config')
-DEFAULT_CONFIG_FILE = os.path.join(DEFAULT_CONFIG_FOLDER, 'db.json')
+DEFAULT_CONFIG_FILE = os.path.join(DEFAULT_CONFIG_FOLDER, 'config.json')
 
 
 def create_args():
@@ -77,4 +77,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    pass
+    # main()
