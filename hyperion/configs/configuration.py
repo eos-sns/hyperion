@@ -60,3 +60,6 @@ class EosConfiguration(JsonConfiguration):
 
     def get_src_folder(self):
         return self.get_matrioska_config(['system', 'folder'])
+
+    def get_update_folder(self):
+        return self.get_matrioska_config(['system', 'update folder'])
