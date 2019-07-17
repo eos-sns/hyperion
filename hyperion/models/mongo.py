@@ -19,13 +19,18 @@ class MongoRunner(MetaRunner):
     def __init__(self):
         super().__init__('CREATOR')
 
-        self.mongo_client = MongoClient()
+        self.mongo_client = None
         self.mongo_db = None  # will be created once there is a configuration
 
     def _open_mongo(self):
-        db_name = self.configuration.get_db_name()
-        coll_name = self.configuration.get_coll_name()
-        self.mongo_db = self.mongo_client[db_name][coll_name]
+        if not self.mongo_client:
+            self.mongo_client = MongoClient(
+                self.configuration.get_db_server(),
+                self.configuration.get_db_port()
+            )
+
+        if not self.mongo_db:
+            self.mongo_db = self.mongo_client[self.configuration.get_db_name()][self.configuration.get_coll_name()]
 
     def _close_mongo(self):
         self.mongo_client.close()
@@ -45,7 +50,6 @@ class MongoRunner(MetaRunner):
             for key in file_reader.attrs.keys()
             if key not in discard_keys
         }
-        print(model)
         model['path'] = file_path  # build model
 
         file_reader.close()

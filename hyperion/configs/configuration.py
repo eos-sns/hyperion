@@ -15,14 +15,11 @@ class Configuration:
         self.data = None  # will be a dictionary when parsed
         self.logger = get_custom_logger('CONFIGURATION')
 
-    def categories(self):
-        return self.get_matrioska_config(['meta', 'categories'])
-
     @abc.abstractmethod
     def _parse(self, reader):
         return {}
 
-    def _get_config(self, key):
+    def get_config(self, key):
         if not self.data:  # cache
             with open(self.config_file) as reader:
                 self.data = self._parse(reader)
@@ -35,7 +32,7 @@ class Configuration:
         :return: None or value in config
         """
 
-        current_matrioska = self._get_config(matrioska[0])
+        current_matrioska = self.get_config(matrioska[0])
 
         for key in matrioska[1:]:  # first key already got
             try:
@@ -57,6 +54,12 @@ class EosConfiguration(JsonConfiguration):
 
     def get_coll_name(self):
         return self.get_matrioska_config(['db', 'collection'])
+
+    def get_db_server(self):
+        return self.get_matrioska_config(['db', 'server'])
+
+    def get_db_port(self):
+        return self.get_matrioska_config(['db', 'port'])
 
     def get_src_folder(self):
         return self.get_matrioska_config(['system', 'folder'])
