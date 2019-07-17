@@ -6,7 +6,7 @@
 import argparse
 import os
 
-from configs.configuration import Configuration
+from configs.configuration import EosConfiguration
 from logs.logger import get_custom_logger
 from models.create import Creator
 from models.meta import MetaRunner
@@ -70,12 +70,11 @@ def get_runner(run_mode) -> MetaRunner:
 def main():
     run_mode, config_file = parse_args(create_args())  # parse mode
 
-    configuration = Configuration(config_file)  # parse config file
+    configuration = EosConfiguration(config_file)  # parse config file
     runner = get_runner(run_mode)  # create runner
     runner.setup(configuration)
     runner.run()  # run
 
 
 if __name__ == '__main__':
-    pass
-    # main()
+    main()

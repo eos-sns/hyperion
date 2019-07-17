@@ -24,10 +24,11 @@ class MongoRunner(MetaRunner):
 
     def _open_mongo(self):
         db_name = self.configuration.get_db_name()
-        self.mongo_db = self.mongo_client[db_name]
+        coll_name = self.configuration.get_coll_name()
+        self.mongo_db = self.mongo_client[db_name][coll_name]
 
     def _close_mongo(self):
-        self.mongo_db.close()
+        self.mongo_client.close()
 
     def _on_start_run(self):
         self._open_mongo()
@@ -36,13 +37,15 @@ class MongoRunner(MetaRunner):
         self._close_mongo()
 
     @staticmethod
-    def _get_file_model(file_path):
+    def _get_file_model(file_path, discard_keys=['external_table_path']):
         file_reader = h5py.File(file_path, 'r')
 
         model = {
-            key: file_reader.attrs.get(key)
+            str(key): float(file_reader.attrs.get(key))  # todo parse key, val
             for key in file_reader.attrs.keys()
+            if key not in discard_keys
         }
+        print(model)
         model['path'] = file_path  # build model
 
         file_reader.close()
@@ -54,11 +57,12 @@ class MongoRunner(MetaRunner):
 
     def _upsert_file(self, file_path):
         model = self._get_file_model(file_path)
+        update_model = {'$set': model}  # set exact
         search_params = {'path': model['path']}
         file_in_db = self.mongo_db.find_one(search_params)
 
         if file_in_db:
-            self.mongo_db.update_one(search_params, model)
+            self.mongo_db.update_one(search_params, update_model)
         else:
             self._add_file(file_path)
 

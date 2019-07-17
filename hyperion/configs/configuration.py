@@ -56,7 +56,7 @@ class EosConfiguration(JsonConfiguration):
         return self.get_matrioska_config(['db', 'name'])
 
     def get_coll_name(self):
-        return self.get_matrioska_config(['db', 'coll'])
+        return self.get_matrioska_config(['db', 'collection'])
 
     def get_src_folder(self):
         return self.get_matrioska_config(['system', 'folder'])
