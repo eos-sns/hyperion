@@ -4,6 +4,7 @@
     "coll": "h5"
   },
   "system": {
-    "folder": "/eos_data/"
+    "folder": "/eos/data/source/",
+    "update folder": "/eos/data/update/"
   }
 }

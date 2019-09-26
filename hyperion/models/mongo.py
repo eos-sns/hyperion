@@ -42,17 +42,21 @@ class MongoRunner(MetaRunner):
         self._close_mongo()
 
     @staticmethod
+    def _get_mongo_val(x):
+        return float(x)
+
+    @staticmethod
     def _get_file_model(file_path, discard_keys=['external_table_path']):
         file_reader = h5py.File(file_path, 'r')
 
+        allowed_keys = filter(lambda x: x not in discard_keys, file_reader.attrs.keys())
         model = {
-            str(key): float(file_reader.attrs.get(key))  # todo parse key, val
-            for key in file_reader.attrs.keys()
-            if key not in discard_keys
+            key: MongoRunner._get_mongo_val(file_reader.attrs.get(key))
+            for key in allowed_keys
         }
-        model['path'] = file_path  # build model
+        model['path'] = file_path  # add path
 
-        file_reader.close()
+        file_reader.close()  # close I/O
         return model
 
     def _add_file(self, file_path):
