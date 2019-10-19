@@ -2,13 +2,17 @@
 
 """ Hyperion updater """
 
-from models.meta import MetaRunner
+from models.mongo import MongoRunner
+from utils.files import find_files
 
 
-class Updater(MetaRunner):
-    def run(self):
-        self.log_message('run')
-        raise NotImplementedError
+class Updater(MongoRunner):
+    def _run(self):
+        files = self._get_files()
+        for file in files:
+            self._upsert_file(file)
 
-    def __init__(self):
-        super().__init__('UPDATER')
+    def _get_files(self):
+        folder = self.configuration.get_update_folder()
+        file_re = '\w+.h5'
+        return find_files(folder, file_re, recurse=True)  # todo recurse ???

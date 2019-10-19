@@ -2,28 +2,17 @@
 
 """ Hyperion EOS creator """
 
-from pymongo import MongoClient
-
-from models.meta import MetaRunner
+from models.mongo import MongoRunner
 from utils.files import find_files
 
 
-class Creator(MetaRunner):
-    def run(self):
-        self.log_message('run')
-        raise NotImplementedError
+class Creator(MongoRunner):
+    def _run(self):
+        files = self._get_files()
+        for file in files:
+            self._add_file(file)
 
-    def __init__(self):
-        super().__init__('CREATOR')
-
-        self.mongo_client = MongoClient()
-        self.mongo_db = None  # will be created once there is a configuration
-
-    def _create(self):
-        db_name = self.configuration.get_db_name()
-        self.mongo_db = self.mongo_client[db_name]
-
-    def _get_files_of(self, category):
-        file_regex = self.configuration.get_file_regex_of(category)
-        source_folder = self.configuration.get_folder_of(category)
-        return find_files(source_folder, file_regex, False)  # todo recurse ?
+    def _get_files(self):
+        folder = self.configuration.get_src_folder()
+        file_re = '\w+.h5'
+        return find_files(folder, file_re, recurse=True)  # todo recurse ???

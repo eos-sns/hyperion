@@ -1,0 +1,10 @@
+{
+  "db": {
+    "name": "eos-data",
+    "coll": "h5"
+  },
+  "system": {
+    "folder": "/eos/data/source/",
+    "update folder": "/eos/data/update/"
+  }
+}
